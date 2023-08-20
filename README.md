@@ -13,3 +13,8 @@
 1. Go to http://{ipAddress}/mediawiki
 1. Follow the instructions
 1. scp LocalSettings.php {address}:/var/www/mediawiki/
+
+# Restore Backup
+
+1. gzip -d backup.sql.gz
+1. mariadb my\_wiki < backup.sql

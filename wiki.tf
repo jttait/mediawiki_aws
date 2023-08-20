@@ -36,7 +36,7 @@ resource "aws_security_group" "mediawiki" {
 resource "aws_instance" "mediawiki" {
   ami                         = "ami-0d09654d0a20d3ae2"
   instance_type               = "t2.micro"
-  user_data                   = file("start.sh")
+  user_data                   = templatefile("start.tftpl", { mariadb_password = var.mariadb_password })
   user_data_replace_on_change = true
   key_name                    = "KeyPair"
   security_groups             = [aws_security_group.mediawiki.name]
@@ -44,11 +44,11 @@ resource "aws_instance" "mediawiki" {
 }
 
 resource "aws_s3_bucket" "mediawiki-backup" {
-  bucket              = "mediawiki-backup-etgaac0m36"
+  bucket = "mediawiki-backup-etgaac0m36"
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki-backup" {
-  bucket                = "mediawiki-backup-etgaac0m36"
+  bucket = aws_s3_bucket.mediawiki-backup.bucket
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
