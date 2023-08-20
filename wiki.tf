@@ -42,3 +42,19 @@ resource "aws_instance" "mediawiki" {
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
 }
+
+resource "aws_s3_bucket" "mediawiki-backup" {
+  bucket              = "mediawiki-backup-etgaac0m36"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "mediawiki-backup" {
+  bucket                = "mediawiki-backup-etgaac0m36"
+  rule {
+    id     = "DeleteOlderThan1dayButKeepAtLeast10"
+    status = "Enabled"
+    noncurrent_version_expiration {
+      newer_noncurrent_versions = "10"
+      noncurrent_days           = 1
+    }
+  }
+}
