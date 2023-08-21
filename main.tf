@@ -36,7 +36,7 @@ resource "aws_security_group" "mediawiki" {
 resource "aws_instance" "mediawiki" {
   ami                         = "ami-0d09654d0a20d3ae2"
   instance_type               = "t2.micro"
-  user_data                   = templatefile("start.tftpl", { mariadb_password = var.mariadb_password })
+  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password })
   user_data_replace_on_change = true
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]

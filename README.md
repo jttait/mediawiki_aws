@@ -1,10 +1,9 @@
 # Installing
 
-1. create ssh key pair
+1. Create SSH key pair
 1. aws configure
 1. terraform plan
 1. terraform apply
-1. Get IP address from EC2
 1. Go to {outputs.mediawiki\_url} in browser
 1. Follow the instructions
 1. Database username is "wikiuser", password is {var.mariadb\_password}
@@ -12,5 +11,5 @@
 
 # Restore Backup
 
-1. ssh on to instance
+1. SSH on to instance
 1. sudo /restore\_mariadb\_from\_latest\_backup.sh
