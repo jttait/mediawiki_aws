@@ -67,7 +67,7 @@ resource "aws_iam_role" "mediawiki_role" {
   name                  = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2messages:AcknowledgeMessage\",\"ec2messages:DeleteMessage\",\"ec2messages:FailMessage\",\"ec2messages:GetEndpoint\",\"ec2messages:GetMessages\",\"ec2messages:SendReply\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
   }
 }
 
