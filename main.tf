@@ -36,7 +36,7 @@ resource "aws_security_group" "mediawiki" {
 resource "aws_instance" "mediawiki" {
   ami                         = "ami-0d09654d0a20d3ae2"
   instance_type               = "t2.micro"
-  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password })
+  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name })
   user_data_replace_on_change = true
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]
@@ -44,12 +44,12 @@ resource "aws_instance" "mediawiki" {
   iam_instance_profile        = aws_iam_instance_profile.mediawiki_profile.name
 }
 
-resource "aws_s3_bucket" "mediawiki-backup" {
-  bucket = "mediawiki-backup-etgaac0m36"
+resource "aws_s3_bucket" "mediawiki_backup" {
+  bucket = var.backup_s3_bucket_name
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "mediawiki-backup" {
-  bucket = aws_s3_bucket.mediawiki-backup.bucket
+resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
+  bucket = aws_s3_bucket.mediawiki_backup.bucket
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
@@ -67,7 +67,7 @@ resource "aws_iam_role" "mediawiki_role" {
   name                  = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ssm:DescribeAssociation\",\"ssm:GetDeployablePatchSnapshotForInstance\",\"ssm:GetDocument\",\"ssm:DescribeDocument\",\"ssm:GetManifest\",\"ssm:GetParameter\",\"ssm:GetParameters\",\"ssm:ListAssociations\",\"ssm:ListInstanceAssociations\",\"ssm:PutInventory\",\"ssm:PutComplianceItems\",\"ssm:PutConfigurePackageResult\",\"ssm:UpdateAssociationStatus\",\"ssm:UpdateInstanceAssociationStatus\",\"ssm:UpdateInstanceInformation\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ssmmessages:CreateControlChannel\",\"ssmmessages:CreateDataChannel\",\"ssmmessages:OpenControlChannel\",\"ssmmessages:OpenDataChannel\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ec2messages:AcknowledgeMessage\",\"ec2messages:DeleteMessage\",\"ec2messages:FailMessage\",\"ec2messages:GetEndpoint\",\"ec2messages:GetMessages\",\"ec2messages:SendReply\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup.arn}/*\"}]}"
   }
 }
 
