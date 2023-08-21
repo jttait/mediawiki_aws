@@ -30,3 +30,11 @@ output of the Terraform module.
 
 1. SSH on to instance
 1. `sudo /restore_mariadb_from_latest_backup.sh`
+
+# References
+
+MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing\_MediaWiki
+
+Terraform: https://www.terraform.io/
+
+AWS Provider for Terraform: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
