@@ -33,7 +33,7 @@ output of the Terraform module.
 
 # References
 
-MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing\_MediaWiki
+MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing_MediaWiki
 
 Terraform: https://www.terraform.io/
 
