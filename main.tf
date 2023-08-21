@@ -67,7 +67,7 @@ resource "aws_iam_role" "mediawiki_role" {
   name                  = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup.arn}\"}]}"
   }
 }
 
