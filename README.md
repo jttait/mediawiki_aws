@@ -1,16 +1,14 @@
 # Installing
 
-1. create ssh key pair called "MediaWikiKeyPair"
+1. create ssh key pair
 1. aws configure
 1. terraform plan
 1. terraform apply
 1. Get IP address from EC2
-1. Go to http://{ipAddress}/mediawiki
+1. Go to {outputs.mediawiki\_url} in browser
 1. Follow the instructions
-1. Database user is wikiuser, password is what you entered as terraform input variable
-1. ssh on to instance using MediaWikiKeyPair PEM
-1. sudo vim /var/www/html/mediawiki/LocalSettings.php
-1. Paste in contents and save (:x)
+1. Database username is "wikiuser", password is {var.mariadb\_password}
+1. scp -i "{var.ssh\_key\_pair\_name}.pem" LocalSettings.php ubuntu@{ec2\_instance\_public\_dns}:/var/www/html/mediawiki/
 
 # Restore Backup
 

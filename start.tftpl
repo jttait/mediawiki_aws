@@ -30,3 +30,5 @@ echo "aws s3 cp s3://mediawiki-backup-etgaac0m36/backup.sql.gz /backup.sql.gz" >
 echo "gzip -d /backup.sql.gz" >> /restore_mariadb_from_latest_backup.sh
 echo "mariadb my_wiki < /backup.sql" >> /restore_mariadb_from_latest_backup.sh
 chmod +x /restore_mariadb_from_latest_backup.sh
+
+chmod a=wrx /var/www/html/mediawiki
