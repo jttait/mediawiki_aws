@@ -44,11 +44,11 @@ resource "aws_instance" "mediawiki" {
   iam_instance_profile        = aws_iam_instance_profile.mediawiki_profile.name
 }
 
-resource "aws_s3_bucket" "mediawiki-backup" {
-  bucket = "mediawiki-backup-etgaac0m36"
+resource "aws_s3_bucket" "mediawiki_backup" {
+  bucket = var.backup_s3_bucket_name
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "mediawiki-backup" {
+resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
   bucket = aws_s3_bucket.mediawiki-backup.bucket
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
