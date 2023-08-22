@@ -1,0 +1,11 @@
+name: Terraform Validate
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
