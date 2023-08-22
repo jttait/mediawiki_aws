@@ -54,7 +54,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
     noncurrent_version_expiration {
-      newer_noncurrent_versions = "10"
+      newer_noncurrent_versions = 10
       noncurrent_days           = 1
     }
   }
@@ -62,8 +62,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
 
 resource "aws_iam_role" "mediawiki_role" {
   assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
-  force_detach_policies = false
-  max_session_duration  = 3600
   name                  = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
