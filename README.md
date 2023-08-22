@@ -38,3 +38,5 @@ MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing_MediaWi
 Terraform: https://www.terraform.io/
 
 AWS Provider for Terraform: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+
+MariaDB Dump: https://mariadb.com/kb/en/mariadb-dump/
