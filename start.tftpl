@@ -21,7 +21,7 @@ rm /mediawiki-*.tar.gz
 
 chmod a=wrx /var/www/html/mediawiki
 
-if [ ${backup_s3_bucket_name} -n ]
+if [ "${backup_s3_bucket_name}" -n ]
 then
   mkdir /mariadb_backups
   echo "#!/bin/bash" > /etc/cron.hourly/mariadb_backups
