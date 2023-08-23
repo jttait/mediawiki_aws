@@ -19,16 +19,18 @@ tar -xzvf mediawiki-*.tar.gz --directory /var/www/html/
 mv /var/www/html/mediawiki* /var/www/html/mediawiki
 rm /mediawiki-*.tar.gz
 
-mkdir /mariadb_backups
-echo "#!/bin/bash" > /etc/cron.hourly/mariadb_backups
-echo "mariadb-dump --user=wikiuser --password=${mariadb_password} my_wiki | gzip > /mariadb_backups/backup.sql.gz" >> /etc/cron.hourly/mariadb_backups
-echo "aws s3 cp /mariadb_backups/backup.sql.gz s3://${backup_s3_bucket_name}/backup.sql.gz" >> /etc/cron.hourly/mariadb_backups
-chmod +x /etc/cron.hourly/mariadb_backups
-
-echo "#!/bin/bash" > /restore_mariadb_from_latest_backup.sh
-echo "aws s3 cp s3://${backup_s3_bucket_name}/backup.sql.gz /backup.sql.gz" >> /restore_mariadb_from_latest_backup.sh
-echo "gzip -d /backup.sql.gz" >> /restore_mariadb_from_latest_backup.sh
-echo "mariadb my_wiki < /backup.sql" >> /restore_mariadb_from_latest_backup.sh
-chmod +x /restore_mariadb_from_latest_backup.sh
-
 chmod a=wrx /var/www/html/mediawiki
+
+if [ ${backup_s3_bucket_name} -ne ""]
+  mkdir /mariadb_backups
+  echo "#!/bin/bash" > /etc/cron.hourly/mariadb_backups
+  echo "mariadb-dump --user=wikiuser --password=${mariadb_password} my_wiki | gzip > /mariadb_backups/backup.sql.gz" >> /etc/cron.hourly/mariadb_backups
+  echo "aws s3 cp /mariadb_backups/backup.sql.gz s3://${backup_s3_bucket_name}/backup.sql.gz" >> /etc/cron.hourly/mariadb_backups
+  chmod +x /etc/cron.hourly/mariadb_backups
+
+  echo "#!/bin/bash" > /restore_mariadb_from_latest_backup.sh
+  echo "aws s3 cp s3://${backup_s3_bucket_name}/backup.sql.gz /backup.sql.gz" >> /restore_mariadb_from_latest_backup.sh
+  echo "gzip -d /backup.sql.gz" >> /restore_mariadb_from_latest_backup.sh
+  echo "mariadb my_wiki < /backup.sql" >> /restore_mariadb_from_latest_backup.sh
+  chmod +x /restore_mariadb_from_latest_backup.sh
+fi
