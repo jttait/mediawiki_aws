@@ -41,7 +41,7 @@ resource "aws_instance" "mediawiki" {
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
-  iam_instance_profile        = aws_iam_instance_profile.mediawiki_profile.name
+  iam_instance_profile        = var.backup_s3_bucket_name == "" ? aws_iam_instance_profile.mediawiki[0].name : null
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
@@ -62,7 +62,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
   }
 }
 
-resource "aws_iam_role" "mediawiki_role" {
+resource "aws_iam_role" "mediawiki" {
   count              = var.backup_s3_bucket_name ? 1 : 0
   assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
   name               = "mediawiki_role"
@@ -72,8 +72,8 @@ resource "aws_iam_role" "mediawiki_role" {
   }
 }
 
-resource "aws_iam_instance_profile" "mediawiki_profile" {
+resource "aws_iam_instance_profile" "mediawiki" {
   count = var.backup_s3_bucket_name ? 1 : 0
   name  = "mediawiki_profile"
-  role  = aws_iam_role.mediawiki_role[0]
+  role  = aws_iam_role.mediawiki[0]
 }
