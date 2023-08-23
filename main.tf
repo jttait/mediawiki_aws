@@ -51,7 +51,7 @@ resource "aws_s3_bucket" "mediawiki_backup" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
   count  = var.backup_s3_bucket_name ? 1 : 0
-  bucket = aws_s3_bucket.mediawiki_backup[count.bucket]
+  bucket = aws_s3_bucket.mediawiki_backup[0]
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
@@ -68,12 +68,12 @@ resource "aws_iam_role" "mediawiki_role" {
   name               = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup.arn}/*\"}]}"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}"
   }
 }
 
 resource "aws_iam_instance_profile" "mediawiki_profile" {
   count = var.backup_s3_bucket_name ? 1 : 0
   name  = "mediawiki_profile"
-  role  = aws_iam_role.mediawiki_role[count.name]
+  role  = aws_iam_role.mediawiki_role[0]
 }
