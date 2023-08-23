@@ -21,7 +21,7 @@ rm /mediawiki-*.tar.gz
 
 chmod a=wrx /var/www/html/mediawiki
 
-if [ ${backup_s3_bucket_name} -ne ""]
+if [ ${backup_s3_bucket_name} -ne "" ]
   mkdir /mariadb_backups
   echo "#!/bin/bash" > /etc/cron.hourly/mariadb_backups
   echo "mariadb-dump --user=wikiuser --password=${mariadb_password} my_wiki | gzip > /mariadb_backups/backup.sql.gz" >> /etc/cron.hourly/mariadb_backups
