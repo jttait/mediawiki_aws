@@ -45,12 +45,12 @@ resource "aws_instance" "mediawiki" {
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
-  count  = var.backup_s3_bucket_name ? 1 : 0
+  count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = var.backup_s3_bucket_name
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
-  count  = var.backup_s3_bucket_name ? 1 : 0
+  count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = aws_s3_bucket.mediawiki_backup[0]
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
@@ -63,7 +63,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
 }
 
 resource "aws_iam_role" "mediawiki" {
-  count              = var.backup_s3_bucket_name ? 1 : 0
+  count              = var.backup_s3_bucket_name == "" ? 0 : 1
   assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
   name               = "mediawiki_role"
   inline_policy {
@@ -73,7 +73,7 @@ resource "aws_iam_role" "mediawiki" {
 }
 
 resource "aws_iam_instance_profile" "mediawiki" {
-  count = var.backup_s3_bucket_name ? 1 : 0
+  count = var.backup_s3_bucket_name == "" ? 0 : 1
   name  = "mediawiki_profile"
   role  = aws_iam_role.mediawiki[0]
 }
