@@ -41,15 +41,17 @@ resource "aws_instance" "mediawiki" {
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
-  iam_instance_profile        = aws_iam_instance_profile.mediawiki_profile.name
+  iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
+  count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = var.backup_s3_bucket_name
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
-  bucket = aws_s3_bucket.mediawiki_backup.bucket
+  count  = var.backup_s3_bucket_name == "" ? 0 : 1
+  bucket = aws_s3_bucket.mediawiki_backup[0].bucket
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
@@ -60,16 +62,18 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
   }
 }
 
-resource "aws_iam_role" "mediawiki_role" {
+resource "aws_iam_role" "mediawiki" {
+  count              = var.backup_s3_bucket_name == "" ? 0 : 1
   assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
   name               = "mediawiki_role"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup.arn}/*\"}]}"
+    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}"
   }
 }
 
-resource "aws_iam_instance_profile" "mediawiki_profile" {
-  name = "mediawiki_profile"
-  role = aws_iam_role.mediawiki_role.name
+resource "aws_iam_instance_profile" "mediawiki" {
+  count = var.backup_s3_bucket_name == "" ? 0 : 1
+  name  = "mediawiki_profile"
+  role  = aws_iam_role.mediawiki[0].name
 }

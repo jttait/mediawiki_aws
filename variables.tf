@@ -12,4 +12,5 @@ variable "ssh_key_pair_name" {
 variable "backup_s3_bucket_name" {
   description = "This is name for S3 bucket for MariaDB backups"
   type        = string
+  default     = ""
 }
