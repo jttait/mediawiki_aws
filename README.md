@@ -14,7 +14,6 @@ output of the Terraform module.
 
 # Installing
 
-1. `terraform plan`
 1. `terraform apply`
 1. Go to {outputs.mediawiki\_url} in browser
 1. Follow the instructions. Database username is "wikiuser", password is {var.mariadb\_password}
