@@ -51,7 +51,7 @@ resource "aws_s3_bucket" "mediawiki_backup" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
   count  = var.backup_s3_bucket_name == "" ? 0 : 1
-  bucket = aws_s3_bucket.mediawiki_backup[0]
+  bucket = aws_s3_bucket.mediawiki_backup[0].bucket
   rule {
     id     = "DeleteOlderThan1dayButKeepAtLeast10"
     status = "Enabled"
@@ -75,5 +75,5 @@ resource "aws_iam_role" "mediawiki" {
 resource "aws_iam_instance_profile" "mediawiki" {
   count = var.backup_s3_bucket_name == "" ? 0 : 1
   name  = "mediawiki_profile"
-  role  = aws_iam_role.mediawiki[0]
+  role  = aws_iam_role.mediawiki[0].name
 }
