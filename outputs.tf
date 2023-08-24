@@ -5,5 +5,5 @@ output "ec2_instance_public_dns" {
 
 output "mediawiki_url" {
   description = "URL of wiki"
-  value       = "http://${aws_instance.mediawiki.public_ip}/mediawiki"
+  value       = "http://${aws_eip.mediawiki.public_ip}/mediawiki"
 }
