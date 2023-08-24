@@ -9,8 +9,8 @@ files to S3.
 The MediaWiki setup has a manual setup step using the browser and it doesn't seem possible to
 automate this. After setting up in the UI, you then need to upload a settings file to the EC2.
 
-After installation, the wiki is accessible using the public IP of the EC2 instance. This URL is an
-output of the Terraform module.
+After installation, the wiki is accessible using the Elastic IP. This URL is an output of the
+Terraform module.
 
 # Installing
 
@@ -26,7 +26,7 @@ output of the Terraform module.
 
 # References
 
-MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing_MediaWiki
+MediaWiki installation: https://www.mediawiki.org/wiki/Manual:Installing\_MediaWiki
 
 Terraform: https://www.terraform.io/
 
