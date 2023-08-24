@@ -45,8 +45,8 @@ resource "aws_instance" "mediawiki" {
 }
 
 resource "aws_eip" "mediawiki" {
-	instance = aws_instance.mediawiki.id
-	domain = "vpc"
+  instance = aws_instance.mediawiki.id
+  domain   = "vpc"
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
