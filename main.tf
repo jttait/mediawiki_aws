@@ -1,3 +1,16 @@
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["099720109477"]
+}
+
 resource "aws_security_group" "mediawiki" {
   name        = "Inbound HTTP and HTTPS"
   description = "Inbound HTTP and HTTPS"
@@ -34,7 +47,7 @@ resource "aws_security_group" "mediawiki" {
 }
 
 resource "aws_instance" "mediawiki" {
-  ami                         = "ami-0d09654d0a20d3ae2"
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
   user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name })
   user_data_replace_on_change = true
