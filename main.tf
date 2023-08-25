@@ -48,7 +48,7 @@ resource "aws_security_group" "mediawiki" {
 
 resource "aws_instance" "mediawiki" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t2.micro"
+  instance_type               = var.ec2_instance_type
   user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name })
   user_data_replace_on_change = true
   key_name                    = var.ssh_key_pair_name
