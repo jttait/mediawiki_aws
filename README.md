@@ -15,7 +15,7 @@ Terraform module.
 # Installing
 
 1. `terraform apply`
-1. `terraform apply`. (There seems to be a bug where EC2 public DNS is not updated and previous value remains in Terraform and is displayed in the outputs. Re-running the apply fixes this issue, second apply doesn't make any changes to the infrastrucutre).
+1. `terraform apply` (There seems to be a bug where EC2 public DNS is not updated and previous value remains in Terraform and is displayed in the outputs. Re-running the apply fixes this issue, the second apply doesn't make any infrastructure changes).
 1. Wait until EC2 instance initializes and MediaWiki server starts
 1. Go to {outputs.mediawiki\_url} in browser
 1. Follow the instructions to setup wiki. Database username is "wikiuser", password is {var.mariadb\_password}
