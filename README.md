@@ -15,8 +15,9 @@ Terraform module.
 # Installing
 
 1. `terraform apply`
+1. Wait until EC2 instance initializes and MediaWiki server starts
 1. Go to {outputs.mediawiki\_url} in browser
-1. Follow the instructions. Database username is "wikiuser", password is {var.mariadb\_password}
+1. Follow the instructions to setup wiki. Database username is "wikiuser", password is {var.mariadb\_password}
 1. `scp -i "{var.ssh_key_pair_name}.pem" LocalSettings.php ubuntu@{ec2_instance_public_dns}:/var/www/html/mediawiki/`
 
 # Restore Backup
