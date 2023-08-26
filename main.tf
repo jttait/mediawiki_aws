@@ -54,7 +54,7 @@ resource "aws_instance" "mediawiki" {
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
-  iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
+  iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki.name
 }
 
 resource "aws_eip_association" "mediawiki" {
