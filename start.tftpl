@@ -25,6 +25,13 @@ php /var/www/html/mediawiki/maintenance/run.php install \
 	--pass ${admin_password} \
 	"${wiki_name}" "Admin"
 
+if [ "${user_rights}" = "private" ]
+then
+echo "\$wgGroupPermissions['*']['read'] = false;" >> /var/www/html/mediawiki/LocalSettings.php
+echo "\$wgGroupPermissions['*']['edit'] = false;" >> /var/www/html/mediawiki/LocalSettings.php
+echo "\$wgGroupPermissions['*']['createaccount'] = false;" >> /var/www/html/mediawiki/LocalSettings.php
+fi
+
 if [ -n "${backup_s3_bucket_name}" ]
 then
 mkdir /mariadb_backups

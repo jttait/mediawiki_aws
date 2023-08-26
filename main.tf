@@ -49,7 +49,7 @@ resource "aws_security_group" "mediawiki" {
 resource "aws_instance" "mediawiki" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.ec2_instance_type
-  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name, mediawiki_url = aws_eip.mediawiki.public_ip, wiki_name = var.wiki_name, admin_password = var.admin_password })
+  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name, mediawiki_url = aws_eip.mediawiki.public_ip, wiki_name = var.wiki_name, admin_password = var.admin_password, user_rights = var.user_rights })
   user_data_replace_on_change = true
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]

@@ -31,3 +31,13 @@ variable "admin_password" {
   type        = string
   sensitive   = true
 }
+
+variable "user_rights" {
+  description = "User rights for the wiki"
+  type        = string
+  default     = "public"
+  validation {
+    condition     = can(regex("public|private", var.user_rights))
+    error_message = "The user_rights variable must be either public or private"
+  }
+}
