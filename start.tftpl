@@ -19,6 +19,14 @@ rm /mediawiki-*.tar.gz
 
 chmod a=wrx /var/www/html/mediawiki
 
+php /var/www/html/mediawiki/maintenance/run.php install \
+	--server http://${mediawiki_url} \
+        --scriptpath /mediawiki \
+	--dbuser wikiuser \
+	--dbpass ${mariadb_password} \
+	--pass ${admin_password} \
+	"${wiki_name}" "Admin"
+
 if [ -n "${backup_s3_bucket_name}" ]
 then
 mkdir /mariadb_backups

@@ -49,7 +49,7 @@ resource "aws_security_group" "mediawiki" {
 resource "aws_instance" "mediawiki" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.ec2_instance_type
-  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name })
+  user_data                   = templatefile("${path.module}/start.tftpl", { mariadb_password = var.mariadb_password, backup_s3_bucket_name = var.backup_s3_bucket_name, mediawiki_url = aws_eip.mediawiki.public_ip, wiki_name = var.wiki_name, admin_password = var.admin_password })
   user_data_replace_on_change = true
   key_name                    = var.ssh_key_pair_name
   security_groups             = [aws_security_group.mediawiki.name]
@@ -57,9 +57,13 @@ resource "aws_instance" "mediawiki" {
   iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
 }
 
+resource "aws_eip_association" "mediawiki" {
+  instance_id   = aws_instance.mediawiki.id
+  allocation_id = aws_eip.mediawiki.id
+}
+
 resource "aws_eip" "mediawiki" {
-  instance = aws_instance.mediawiki.id
-  domain   = "vpc"
+  domain = "vpc"
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
