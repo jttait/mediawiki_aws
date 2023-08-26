@@ -86,7 +86,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
 
 resource "aws_iam_role" "mediawiki" {
   assume_role_policy = jsonencode({ "Statement" : [{ "Action" : "sts:AssumeRole", "Effect" : "Allow", "Principal" : { "Service" : "ec2.amazonaws.com" }, "Sid" : "" }], "Version" : "2012-10-17" })
-  name               = "mediawiki_role"
+  name               = "mediawiki"
 }
 
 resource "aws_iam_instance_profile" "mediawiki" {
