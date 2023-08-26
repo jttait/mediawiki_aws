@@ -25,3 +25,9 @@ variable "wiki_name" {
   description = "Name of the wiki"
   type        = string
 }
+
+variable "admin_password" {
+  description = "Password for Admin user"
+  type        = string
+  sensitive   = true
+}
