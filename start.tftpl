@@ -19,7 +19,7 @@ rm /mediawiki-*.tar.gz
 
 chmod a=wrx /var/www/html/mediawiki
 
-cat <<EOF /var/www/html/mediawiki/LocalSettings.php
+cat <<EOF > /var/www/html/mediawiki/LocalSettings.php
 <?php
 if ( !defined( 'MEDIAWIKI' ) ) {
 exit;"
