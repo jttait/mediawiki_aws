@@ -96,6 +96,6 @@ resource "aws_iam_role" "mediawiki" {
 
 resource "aws_iam_instance_profile" "mediawiki" {
   count = var.backup_s3_bucket_name == "" ? 0 : 1
-  name  = "mediawiki_profile"
+  name  = "mediawiki"
   role  = aws_iam_role.mediawiki[0].name
 }
