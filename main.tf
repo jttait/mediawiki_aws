@@ -96,7 +96,6 @@ resource "aws_iam_instance_profile" "mediawiki" {
 
 resource "aws_iam_role_policy" "mediawiki_s3" {
   count  = var.backup_s3_bucket_name == "" ? 0 : 1
-  bucket = aws_s3_bucket.mediawiki_backup[0].bucket
   name   = "mediawiki_s3"
   role   = aws_iam_role.mediawiki.id
   policy = jsonencode("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}")
