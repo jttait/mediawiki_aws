@@ -9,9 +9,11 @@ unzip awscliv2.zip
 sudo ./aws/install
 rm /awscliv2.zip
 
-echo "CREATE DATABASE my_wiki;" > create_mariadb.sql
-echo "CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY '${mariadb_password}';" >> create_mariadb.sql
-echo "GRANT ALL PRIVILEGES ON my_wiki.* TO 'wikiuser'@'localhost' WITH GRANT OPTION;" >> create_mariadb.sql
+echo > create_mariadb.sql<< EOF
+CREATE DATABASE my_wiki;
+CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY '${mariadb_password}';
+GRANT ALL PRIVILIGES ON my_wiki.* TO 'wikiuser'@'localhost' WITH OPTION;
+EOF
 mariadb < create_mariadb.sql
 rm create_mariadb.sql
 
@@ -21,6 +23,58 @@ mv /var/www/html/mediawiki* /var/www/html/mediawiki
 rm /mediawiki-*.tar.gz
 
 chmod a=wrx /var/www/html/mediawiki
+
+echo > /var/www/html/mediawiki/LocalSettings.php<< EOF
+<?php
+if ( !defined( 'MEDIAWIKI' ) ) {
+exit;"
+}
+\$wgSitename = \"Example Wiki Name\";
+\$wgMetaNamespace = \"Example Wiki Name\";
+\$wgScriptPath = \"/mediawiki\";
+\$wgServer = \"http://test\";
+\$wgResourceBasePath = \$wgScriptPath;
+\$wgLogos = [
+'lx' => \"\$wgResourceBasePath/resources/assets/change-your-logo.svg\",
+'icon' => \"\$wgResourceBasePath/resources/assets/change-your-logo.svg\",
+];
+\$wgEnableEmail = true;
+\$wgEnableUserEmail = true;
+\$wgEmergencyContact = \"\";
+\$wgPasswordSender = \"\";
+\$wgEnotifUserTalk = false;
+\$wgEnotifWatchlist = false;
+\$wgEmailNotification = true;
+\$wgDBType = \"mysql\";
+\$wgDBServer = \"localhost\";
+\$wgDBUser = \"wikiuser\";
+\$wgDBPassword = \"password\";
+\$wgDBprefix = \"\";
+\$wgDBtableOptions = \"ENGINE=InnoDB, DEFAULT CHARSET=binary\";
+\$wgSharedTables[] = \"actor\";
+\$wgMainCacheType = CACHE_ACCEL;
+\$wgMemCachedServers = [];
+\$wgEnableUploads = false;
+\$wgUseInstantCommons = false;
+\$wgPingback = false;
+\$wgLanguageCode = \"en\";
+\$wgLocalTimezone = \"UTC\";
+\$wgSecretKey = $(tr -dc a-f0-9 </dev/urandom | head -c 64)
+\$wgUpgradeKey = $(tr -dc a-f0-9 </dev/urandom | head -c 16)
+\$wgRightsPage = \"\";
+\$wgRightsUrl = \"\";
+\$wgRightsText = \"\";
+\$wgRightsUrl = \"\";
+\$wgDiff3 = \"/usr/bin/diff3\";
+\$wgGroupPermissions['*']['createaccount'] = false;
+\$wgGroupPermissions['*']['edit'] = false;
+\$wgGroupPermissions['*']['read'] = false;
+\$wgDefaultSkin = "vector";
+wfLoadSkin( 'MinervaNeue' );
+wfLoadSkin( 'MonoBook' );
+wfLoadSkin( 'Timeless' );
+wfLoadSkin( 'Vector' );
+EOF
 
 if [ -n "${backup_s3_bucket_name}" ]
 then
