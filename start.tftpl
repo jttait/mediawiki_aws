@@ -22,7 +22,7 @@ chmod a=wrx /var/www/html/mediawiki
 cat <<EOF > /var/www/html/mediawiki/LocalSettings.php
 <?php
 if ( !defined( 'MEDIAWIKI' ) ) {
-exit;"
+	exit;
 }
 \$wgSitename = "${wiki_name}";
 \$wgMetaNamespace = "${wiki_name}";
@@ -30,36 +30,40 @@ exit;"
 \$wgServer = "http://${mediawiki_url}";
 \$wgResourceBasePath = \$wgScriptPath;
 \$wgLogos = [
-'lx' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
+'1x' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
 'icon' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
 ];
 \$wgEnableEmail = true;
-\$wgEnableUserEmail = true;
+\$wgEnableUserEmail = true; # UPO
 \$wgEmergencyContact = "";
 \$wgPasswordSender = "";
-\$wgEnotifUserTalk = false;
-\$wgEnotifWatchlist = false;
-\$wgEmailNotification = true;
-\$wgDBType = "mysql";
-\$wgDBServer = "localhost";
-\$wgDBUser = "wikiuser";
-\$wgDBPassword = "${mariadb_password}";
+\$wgEnotifUserTalk = false; # UPO
+\$wgEnotifWatchlist = false; # UPO
+\$wgEmailAuthentication = true;
+\$wgDBtype = "mysql";
+\$wgDBserver = "localhost";
+\$wgDBname = "my_wiki";
+\$wgDBuser = "wikiuser";
+\$wgDBpassword = "${mariadb_password}";
 \$wgDBprefix = "";
-\$wgDBtableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+\$wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 \$wgSharedTables[] = "actor";
 \$wgMainCacheType = CACHE_ACCEL;
 \$wgMemCachedServers = [];
 \$wgEnableUploads = false;
+\$wgUseImageMagick = true;
+\$wgImageMagickConvertCommand = "/usr/bin/convert";
 \$wgUseInstantCommons = false;
 \$wgPingback = false;
 \$wgLanguageCode = "en";
-\$wgLocalTimezone = "UTC";
+\$wgLocaltimezone = "UTC";
 \$wgSecretKey = "$(tr -dc a-f0-9 </dev/urandom | head -c 64)"
+\$wgAuthenticationTokenVersion = "1";
 \$wgUpgradeKey = "$(tr -dc a-f0-9 </dev/urandom | head -c 16)"
-\$wgRightsPage = "";
+\$wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
 \$wgRightsUrl = "";
 \$wgRightsText = "";
-\$wgRightsUrl = "";
+\$wgRightsIcon = "";
 \$wgDiff3 = "/usr/bin/diff3";
 \$wgGroupPermissions['*']['createaccount'] = false;
 \$wgGroupPermissions['*']['edit'] = false;
