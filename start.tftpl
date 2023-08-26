@@ -24,11 +24,11 @@ cat <<EOF > /var/www/html/mediawiki/LocalSettings.php
 if ( !defined( 'MEDIAWIKI' ) ) {
 exit;"
 }
-\$wgSitename = "Example Wiki Name";
-\$wgMetaNamespace = "Example Wiki Name";
+\$wgSitename = "${wiki_name}";
+\$wgMetaNamespace = "${wiki_name}";
 \$wgScriptPath = "/mediawiki";
-\$wgServer = "http://test";
-\$wgResourceBasePath = $wgScriptPath;
+\$wgServer = "${mediawiki_url}";
+\$wgResourceBasePath = \$wgScriptPath;
 \$wgLogos = [
 'lx' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
 'icon' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
@@ -43,7 +43,7 @@ exit;"
 \$wgDBType = "mysql";
 \$wgDBServer = "localhost";
 \$wgDBUser = "wikiuser";
-\$wgDBPassword = "password";
+\$wgDBPassword = "${mariadb_password}";
 \$wgDBprefix = "";
 \$wgDBtableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 \$wgSharedTables[] = "actor";

@@ -20,3 +20,8 @@ variable "ec2_instance_type" {
   type        = string
   default     = "t2.micro"
 }
+
+variable "wiki_name" {
+  description = "Name of the wiki"
+  type        = string
+}
