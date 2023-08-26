@@ -6,13 +6,15 @@ Optional backups of the MariaDB database to S3 bucket. These are done by an hour
 the EC2. The required IAM role and profile is also created to allow the EC2 to upload the backup
 files to S3.
 
+An existing SSH key pair is provided as an input which can be used to connect to the EC2 instance.
+
 After installation, the wiki is accessible using the Elastic IP. This URL is an output of the
 Terraform module.
 
 # Installing
 
 1. `terraform apply`
-1. `terraform apply` (There seems to be a bug where EC2 public DNS is not updated and previous value remains in Terraform and is displayed in the outputs. Re-running the apply fixes this issue, the second apply doesn't make any infrastructure changes).
+1. `terraform apply` (There seems to be a bug with the AWS Provider/Terraform where EC2 public DNS is not updated and previous value remains in Terraform and is displayed in the outputs. Re-running the apply fixes this issue, the second apply doesn't make any infrastructure changes).
 1. Wait until EC2 instance initializes and MediaWiki server starts
 1. Go to {outputs.mediawiki\_url} in browser
 
