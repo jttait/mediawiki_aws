@@ -86,16 +86,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
 
 resource "aws_iam_role" "mediawiki" {
   count              = var.backup_s3_bucket_name == "" ? 0 : 1
-  assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
-  name               = "mediawiki_role"
+  assume_role_policy = jsonencode({"Statement":[{"Action":"sts:AssumeRole","Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Sid":""}],"Version":"2012-10-17"})
+  name               = "mediawiki"
   inline_policy {
     name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}"
+    policy = jsonencode({"Version":"2012-10-17","Statement":[{"Action":["s3:*"],"Effect":"Allow","Resource":"${aws_s3_bucket.mediawiki_backup[0].arn}/*"}]})
   }
 }
 
 resource "aws_iam_instance_profile" "mediawiki" {
   count = var.backup_s3_bucket_name == "" ? 0 : 1
-  name  = "mediawiki_profile"
+  name  = "mediawiki"
   role  = aws_iam_role.mediawiki[0].name
 }
