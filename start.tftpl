@@ -27,7 +27,7 @@ exit;"
 \$wgSitename = "${wiki_name}";
 \$wgMetaNamespace = "${wiki_name}";
 \$wgScriptPath = "/mediawiki";
-\$wgServer = "${mediawiki_url}";
+\$wgServer = "http://${mediawiki_url}";
 \$wgResourceBasePath = \$wgScriptPath;
 \$wgLogos = [
 'lx' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
@@ -54,8 +54,8 @@ exit;"
 \$wgPingback = false;
 \$wgLanguageCode = "en";
 \$wgLocalTimezone = "UTC";
-\$wgSecretKey = $(tr -dc a-f0-9 </dev/urandom | head -c 64)
-\$wgUpgradeKey = $(tr -dc a-f0-9 </dev/urandom | head -c 16)
+\$wgSecretKey = "$(tr -dc a-f0-9 </dev/urandom | head -c 64)"
+\$wgUpgradeKey = "$(tr -dc a-f0-9 </dev/urandom | head -c 16)"
 \$wgRightsPage = "";
 \$wgRightsUrl = "";
 \$wgRightsText = "";
