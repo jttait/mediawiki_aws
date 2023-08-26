@@ -85,17 +85,26 @@ resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
 }
 
 resource "aws_iam_role" "mediawiki" {
-  count              = var.backup_s3_bucket_name == "" ? 0 : 1
   assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}"
   name               = "mediawiki_role"
-  inline_policy {
-    name   = "mediawiki_role"
-    policy = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}"
-  }
 }
 
 resource "aws_iam_instance_profile" "mediawiki" {
-  count = var.backup_s3_bucket_name == "" ? 0 : 1
-  name  = "mediawiki_profile"
-  role  = aws_iam_role.mediawiki[0].name
+  name  = "mediawiki"
+  role  = aws_iam_role.mediawiki.name
+}
+
+resource "aws_iam_role_policy" "mediawiki_s3" {
+  count  = var.backup_s3_bucket_name == "" ? 0 : 1
+  bucket = aws_s3_bucket.mediawiki_backup[0].bucket
+  name = "mediawiki_s3"
+  role = aws_iam_role.mediawiki.id
+  policy = jsonencode("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}")
+}
+
+resource "aws_iam_role_policy" "mediawiki_ssm" {
+  name = "mediawiki_ssm"
+  role = aws_iam_role.mediawiki.id
+  policy = jsonencode("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\": \"Allow\",\"Action\":[\"ssm:DescribeAssociation\",\"ssm:GetDeployablePatchSnapshotForInstance\",\"ssm:GetDocument\",\"ssm:DescribeDocument\",\"ssm:GetManifest\",\"ssm:GetParameter\",\"ssm:GetParameters\",\"ssm:ListAssociations\",\"ssm:ListInstanceAssociations\",\"ssm:PutInventory\",\"ssm:PutComplianceItems\",\"ssm:PutConfigurePackageResult\",\"ssm:UpdateAssociationStatus\",\"ssm:UpdateInstanceAssociationStatus\",\"ssm:UpdateInstanceInformation\"],\"Resource\": \"*\"},{\"Effect\": \"Allow\",\"Action\":[\"ssmmessages:CreateControlChannel\",\"ssmmessages:CreateDataChannel\",\"ssmmessages:OpenControlChannel\",\"ssmmessages:OpenDataChannel\"],\"Resource\":\"*\"},{\"Effect\": \"Allow\",\"Action\":[\"ec2messages:AcknowledgeMessage\",\"ec2messages:DeleteMessage\",\"ec2messages:FailMessage\",\"ec2messages:GetEndpoint\",\"ec2messages:GetMessages\",\"ec2messages:SendReply\"],\"Resource\":\"*\"}]}")
+  }
 }
