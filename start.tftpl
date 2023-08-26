@@ -12,7 +12,7 @@ rm /awscliv2.zip
 echo > create_mariadb.sql<< EOF
 CREATE DATABASE my_wiki;
 CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY '${mariadb_password}';
-GRANT ALL PRIVILIGES ON my_wiki.* TO 'wikiuser'@'localhost' WITH OPTION;
+GRANT ALL PRIVILIGES ON my_wiki.* TO 'wikiuser'@'localhost' WITH GRANT OPTION;
 EOF
 mariadb < create_mariadb.sql
 rm create_mariadb.sql
