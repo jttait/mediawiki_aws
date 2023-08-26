@@ -90,21 +90,20 @@ resource "aws_iam_role" "mediawiki" {
 }
 
 resource "aws_iam_instance_profile" "mediawiki" {
-  name  = "mediawiki"
-  role  = aws_iam_role.mediawiki.name
+  name = "mediawiki"
+  role = aws_iam_role.mediawiki.name
 }
 
 resource "aws_iam_role_policy" "mediawiki_s3" {
   count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = aws_s3_bucket.mediawiki_backup[0].bucket
-  name = "mediawiki_s3"
-  role = aws_iam_role.mediawiki.id
+  name   = "mediawiki_s3"
+  role   = aws_iam_role.mediawiki.id
   policy = jsonencode("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:*\"],\"Effect\":\"Allow\",\"Resource\":\"${aws_s3_bucket.mediawiki_backup[0].arn}/*\"}]}")
 }
 
 resource "aws_iam_role_policy" "mediawiki_ssm" {
-  name = "mediawiki_ssm"
-  role = aws_iam_role.mediawiki.id
+  name   = "mediawiki_ssm"
+  role   = aws_iam_role.mediawiki.id
   policy = jsonencode("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\": \"Allow\",\"Action\":[\"ssm:DescribeAssociation\",\"ssm:GetDeployablePatchSnapshotForInstance\",\"ssm:GetDocument\",\"ssm:DescribeDocument\",\"ssm:GetManifest\",\"ssm:GetParameter\",\"ssm:GetParameters\",\"ssm:ListAssociations\",\"ssm:ListInstanceAssociations\",\"ssm:PutInventory\",\"ssm:PutComplianceItems\",\"ssm:PutConfigurePackageResult\",\"ssm:UpdateAssociationStatus\",\"ssm:UpdateInstanceAssociationStatus\",\"ssm:UpdateInstanceInformation\"],\"Resource\": \"*\"},{\"Effect\": \"Allow\",\"Action\":[\"ssmmessages:CreateControlChannel\",\"ssmmessages:CreateDataChannel\",\"ssmmessages:OpenControlChannel\",\"ssmmessages:OpenDataChannel\"],\"Resource\":\"*\"},{\"Effect\": \"Allow\",\"Action\":[\"ec2messages:AcknowledgeMessage\",\"ec2messages:DeleteMessage\",\"ec2messages:FailMessage\",\"ec2messages:GetEndpoint\",\"ec2messages:GetMessages\",\"ec2messages:SendReply\"],\"Resource\":\"*\"}]}")
-  }
 }
