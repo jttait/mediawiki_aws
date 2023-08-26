@@ -24,43 +24,43 @@ cat <<EOF > /var/www/html/mediawiki/LocalSettings.php
 if ( !defined( 'MEDIAWIKI' ) ) {
 exit;"
 }
-\$wgSitename = \"Example Wiki Name\";
-\$wgMetaNamespace = \"Example Wiki Name\";
-\$wgScriptPath = \"/mediawiki\";
-\$wgServer = \"http://test\";
-\$wgResourceBasePath = \$wgScriptPath;
+\$wgSitename = "Example Wiki Name";
+\$wgMetaNamespace = "Example Wiki Name";
+\$wgScriptPath = "/mediawiki";
+\$wgServer = "http://test";
+\$wgResourceBasePath = $wgScriptPath;
 \$wgLogos = [
-'lx' => \"\$wgResourceBasePath/resources/assets/change-your-logo.svg\",
-'icon' => \"\$wgResourceBasePath/resources/assets/change-your-logo.svg\",
+'lx' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
+'icon' => "\$wgResourceBasePath/resources/assets/change-your-logo.svg",
 ];
 \$wgEnableEmail = true;
 \$wgEnableUserEmail = true;
-\$wgEmergencyContact = \"\";
-\$wgPasswordSender = \"\";
+\$wgEmergencyContact = "";
+\$wgPasswordSender = "";
 \$wgEnotifUserTalk = false;
 \$wgEnotifWatchlist = false;
 \$wgEmailNotification = true;
-\$wgDBType = \"mysql\";
-\$wgDBServer = \"localhost\";
-\$wgDBUser = \"wikiuser\";
-\$wgDBPassword = \"password\";
-\$wgDBprefix = \"\";
-\$wgDBtableOptions = \"ENGINE=InnoDB, DEFAULT CHARSET=binary\";
-\$wgSharedTables[] = \"actor\";
+\$wgDBType = "mysql";
+\$wgDBServer = "localhost";
+\$wgDBUser = "wikiuser";
+\$wgDBPassword = "password";
+\$wgDBprefix = "";
+\$wgDBtableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+\$wgSharedTables[] = "actor";
 \$wgMainCacheType = CACHE_ACCEL;
 \$wgMemCachedServers = [];
 \$wgEnableUploads = false;
 \$wgUseInstantCommons = false;
 \$wgPingback = false;
-\$wgLanguageCode = \"en\";
-\$wgLocalTimezone = \"UTC\";
+\$wgLanguageCode = "en";
+\$wgLocalTimezone = "UTC";
 \$wgSecretKey = $(tr -dc a-f0-9 </dev/urandom | head -c 64)
 \$wgUpgradeKey = $(tr -dc a-f0-9 </dev/urandom | head -c 16)
-\$wgRightsPage = \"\";
-\$wgRightsUrl = \"\";
-\$wgRightsText = \"\";
-\$wgRightsUrl = \"\";
-\$wgDiff3 = \"/usr/bin/diff3\";
+\$wgRightsPage = "";
+\$wgRightsUrl = "";
+\$wgRightsText = "";
+\$wgRightsUrl = "";
+\$wgDiff3 = "/usr/bin/diff3";
 \$wgGroupPermissions['*']['createaccount'] = false;
 \$wgGroupPermissions['*']['edit'] = false;
 \$wgGroupPermissions['*']['read'] = false;
