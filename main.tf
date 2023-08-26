@@ -59,7 +59,7 @@ resource "aws_instance" "mediawiki" {
 
 resource "aws_eip_association" "mediawiki" {
   instance_id    = aws_instance.mediawiki.id
-  association_id = aws_eip.mediawiki.id
+  allocation_id = aws_eip.mediawiki.id
 }
 
 resource "aws_eip" "mediawiki" {
