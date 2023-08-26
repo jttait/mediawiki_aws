@@ -57,9 +57,13 @@ resource "aws_instance" "mediawiki" {
   iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
 }
 
+resource "aws_eip_association" "mediawiki" {
+  instance_id    = aws_instance.mediawiki.id
+  association_id = aws_eip.mediawiki.id
+}
+
 resource "aws_eip" "mediawiki" {
-  instance = aws_instance.mediawiki.id
-  domain   = "vpc"
+  domain = "vpc"
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
