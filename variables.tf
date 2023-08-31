@@ -37,7 +37,7 @@ variable "user_rights" {
   type        = string
   default     = "public"
   validation {
-    condition     = can(regex("public|private", var.user_rights))
+    condition     = contains(["public", "private"], var.user_rights)
     error_message = "The user_rights variable must be either public or private"
   }
 }
