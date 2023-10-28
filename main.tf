@@ -44,6 +44,9 @@ resource "aws_security_group" "mediawiki" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
+  tags = {
+    Project = "mediawiki"
+  }
 }
 
 resource "aws_instance" "mediawiki" {
@@ -55,6 +58,9 @@ resource "aws_instance" "mediawiki" {
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
   iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
+  tags = {
+    Project = "mediawiki"
+  }
 }
 
 resource "aws_eip_association" "mediawiki" {
@@ -64,11 +70,17 @@ resource "aws_eip_association" "mediawiki" {
 
 resource "aws_eip" "mediawiki" {
   domain = "vpc"
+  tags = {
+    Project = "mediawiki"
+  }
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
   count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = var.backup_s3_bucket_name
+  tags = {
+    Project = "mediawiki"
+  }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {
@@ -91,6 +103,9 @@ resource "aws_iam_role" "mediawiki" {
   inline_policy {
     name   = "mediawiki_role"
     policy = jsonencode({ "Version" : "2012-10-17", "Statement" : [{ "Action" : ["s3:*"], "Effect" : "Allow", "Resource" : "${aws_s3_bucket.mediawiki_backup[0].arn}/*" }] })
+  }
+  tags = {
+    Project = "mediawiki"
   }
 }
 
