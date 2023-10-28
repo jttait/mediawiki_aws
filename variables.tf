@@ -41,3 +41,9 @@ variable "user_rights" {
     error_message = "The user_rights variable must be either public or private"
   }
 }
+
+variable "tags" {
+  description = "Tags for AWS resources"
+  type        = map(any)
+  default     = {}
+}

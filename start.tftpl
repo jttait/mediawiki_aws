@@ -12,7 +12,7 @@ EOF
 mariadb < create_mariadb.sql
 rm create_mariadb.sql
 
-wget https://releases.wikimedia.org/mediawiki/1.40/mediawiki-1.40.0.tar.gz
+wget https://releases.wikimedia.org/mediawiki/1.40/mediawiki-1.40.1.tar.gz
 tar -xzvf mediawiki-*.tar.gz --directory /var/www/html/
 mv /var/www/html/mediawiki* /var/www/html/mediawiki
 rm /mediawiki-*.tar.gz
