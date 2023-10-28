@@ -56,7 +56,7 @@ resource "aws_instance" "mediawiki" {
   security_groups             = [aws_security_group.mediawiki.name]
   depends_on                  = [aws_security_group.mediawiki]
   iam_instance_profile        = var.backup_s3_bucket_name == "" ? null : aws_iam_instance_profile.mediawiki[0].name
-  tags = var.tags
+  tags                        = var.tags
 }
 
 resource "aws_eip_association" "mediawiki" {
@@ -66,13 +66,13 @@ resource "aws_eip_association" "mediawiki" {
 
 resource "aws_eip" "mediawiki" {
   domain = "vpc"
-  tags = var.tags
+  tags   = var.tags
 }
 
 resource "aws_s3_bucket" "mediawiki_backup" {
   count  = var.backup_s3_bucket_name == "" ? 0 : 1
   bucket = var.backup_s3_bucket_name
-  tags = var.tags
+  tags   = var.tags
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "mediawiki_backup" {

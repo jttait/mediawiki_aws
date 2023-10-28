@@ -44,6 +44,6 @@ variable "user_rights" {
 
 variable "tags" {
   description = "Tags for AWS resources"
-  type = map
-  default = {}
+  type        = map(any)
+  default     = {}
 }
